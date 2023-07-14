@@ -1,4 +1,4 @@
-var finances = [
+var dataset = [
   ['Jan-2010', 867884],
   ['Feb-2010', 984655],
   ['Mar-2010', 322013],
@@ -86,3 +86,37 @@ var finances = [
   ['Jan-2017', 138230],
   ['Feb-2017', 671099],
 ];
+
+let totalMonths = 0;
+let totalProfitLoss = 0;
+let previousProfitLoss = 0;
+let greatestIncrease = { date: '', amount: 0 };
+let greatestDecrease = { date: '', amount: 0 };
+let averageChange = 0;
+
+for (var [date, profitLoss] of dataset) {
+  totalMonths++;
+  totalProfitLoss += profitLoss;
+
+  if (previousProfitLoss !== 0) {
+    let change = profitLoss - previousProfitLoss;
+
+    if (change > greatestIncrease.amount) {
+      greatestIncrease = { date, amount: change };
+    } else if (change < greatestDecrease.amount) {
+      greatestDecrease = { date, amount: change };
+    }
+  }
+
+  previousProfitLoss = profitLoss;
+}
+
+averageChange = totalProfitLoss / (totalMonths - 1);
+
+console.log('Financial Analysis');
+console.log('----------------------------');
+console.log(`Total Months: ${totalMonths}`);
+console.log(`Total: $${totalProfitLoss}`);
+console.log(`Average Change: ${averageChange}`);
+console.log(`Greatest Increase in Profits/Losses: ${greatestIncrease.date} ($${greatestIncrease.amount})`);
+console.log(`Greatest Decrease in Profits/Losses: ${greatestDecrease.date} ($${greatestDecrease.amount})`);
