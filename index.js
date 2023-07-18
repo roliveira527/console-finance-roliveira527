@@ -1,4 +1,4 @@
-var dataset = [
+var finances = [
   ['Jan-2010', 867884],
   ['Feb-2010', 984655],
   ['Mar-2010', 322013],
@@ -87,19 +87,24 @@ var dataset = [
   ['Feb-2017', 671099],
 ];
 
+// Initialize variables
 let totalMonths = 0;
 let totalProfitLoss = 0;
 let previousProfitLoss = 0;
 let greatestIncrease = { date: '', amount: 0 };
 let greatestDecrease = { date: '', amount: 0 };
+let totalChange = 0;
 let averageChange = 0;
 
-for (var [date, profitLoss] of dataset) {
+
+// Perform computations 
+for (var [date, profitLoss] of finances) {
   totalMonths++;
   totalProfitLoss += profitLoss;
 
   if (previousProfitLoss !== 0) {
     let change = profitLoss - previousProfitLoss;
+    totalChange += change;
 
     if (change > greatestIncrease.amount) {
       greatestIncrease = { date, amount: change };
@@ -111,8 +116,9 @@ for (var [date, profitLoss] of dataset) {
   previousProfitLoss = profitLoss;
 }
 
-averageChange = totalProfitLoss / (totalMonths - 1);
+averageChange = Math.round(((totalChange / (totalMonths - 1)) + Number.EPSILON) * 100) / 100; // Round to 2 d.p.
 
+// Console log
 console.log('Financial Analysis');
 console.log('----------------------------');
 console.log(`Total Months: ${totalMonths}`);
